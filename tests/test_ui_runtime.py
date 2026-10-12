@@ -20,6 +20,7 @@ local ui={open={true}}
 local settings={enabled=true,scale=1,offset=4,height=1.9,bob=0,bob_speed=1.3,bob_distance=5,flash=0,flash_speed=1.5,flash_strength=.45,target_color=0,sub_color=0}
 local guard={reason='HideParty loaded; both frames hidden'}
 local draw={stage='draw submitted'}
+local map_ui={open=false,menu='nothing'}
 local ImGuiCond_FirstUseEver=4
 local writes=0
 local function write_settings() writes=writes+1 end

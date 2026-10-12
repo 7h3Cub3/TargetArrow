@@ -11,7 +11,7 @@ SOURCE = (ROOT / 'targetarrow.lua').read_text(encoding='utf-8')
 
 class RestoreDefaultsRuntimeTests(unittest.TestCase):
     def test_restore_all_values_and_save_without_touching_guard(self):
-        interpreter = next((shutil.which(x) for x in ('lua5.1', 'lua', 'luajit') if shutil.which(x)), None)
+        interpreter = next((shutil.which(x) for x in ('lua5.1', 'lua', 'luajit', 'texlua') if shutil.which(x)), None)
         if interpreter is None:
             self.skipTest('Lua interpreter not installed')
         defaults = SOURCE[
@@ -30,6 +30,7 @@ class RestoreDefaultsRuntimeTests(unittest.TestCase):
 local ui = { open = { true } }
 local guard = {reason = 'HideParty loaded; native party and target frames hidden', allowed = true}
 local draw = {stage = 'draw submitted'}
+local map_ui = {open = false, menu = 'nothing'}
 local ImGuiCond_FirstUseEver = 4
 local COLOR_LABELS = 'Original\0Red\0Blue\0Green\0Gold\0Purple\0Cyan\0White\0Custom\0\0'
 local bounds = {scale={0.5,2.5},offset={-100,150},height={0,15},bob_speed={0.1,5},bob_distance={0,30},flash_speed={0.1,5},flash_strength={0,0.85}}

@@ -9,3 +9,6 @@
 - `Draw error`: copy the complete console line and attach it to an issue at https://github.com/7h3Cub3/TargetArrow/issues.
 
 Use `/addon reload targetarrow` after changing Lua files. TargetArrow does not hide frames; HideParty does.
+
+- `last_draw=hidden while map is open`: expected when the native FFXI map is visible; the cursor automatically returns when the map closes.
+- If it stays hidden after closing the map, check `/ta status` for `map_open`, `menu`, `drawing_allowed` and the HideParty guard reason.

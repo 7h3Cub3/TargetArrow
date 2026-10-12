@@ -26,3 +26,7 @@ Both effects can be used independently or together, and neither changes HidePart
 `/ta status`, `/ta on`, `/ta off`, `/ta toggle`, `/ta scale 1.0`, `/ta offset 4`, and `/ta height 1.9` continue to work. `/targetarrow` remains the full alias.
 
 All numeric and color/animation settings are stored in `settings.lua` in the addon directory, which is neither included in source control nor in the release ZIP. Loading the addon never executes this file as Lua code. The session-only `/ta on/off` setting resets to enabled on addon reload. Settings are automatically saved as you change them in the UI.
+
+## Native map visibility
+
+The replacement cursor automatically disappears while the native game map is open and reappears after it closes. This setting is always active and needs no command or toggle. `/ta status` includes `map_open`, `menu` and `last_draw` for troubleshooting.

@@ -29,3 +29,7 @@ The settings panel is drawn through Ashita 4's built-in `imgui` module and trigg
 At render time, optional bobbing only changes the final screen-space Y coordinate; optional flashing only changes the sprite's vertex alpha. Each effect uses a periodic function of the system tick so motion is frame-rate independent. Both default to disabled.
 
 Default color mode chooses the original arrow/subarrow PNG with white sprite tint. Alternate colors use separately shipped neutral-luminance renderings of those same PNG silhouettes and Direct3D vertex color multiplication, so one neutral asset supports presets and custom RGB without modifying the target skeleton.
+
+## Native map suppression
+
+The sprite is submitted using `d3d_present`, where it would otherwise overlap native FFXI UI windows. Each eligible frame, TargetArrow reads Ashita 4’s `menu` pointer chain and checks the active menu name for `map`. While the native map menu is active, the sprite draw is skipped; normal drawing resumes on the next frame after the menu closes. This check is read-only and does not change cursor positioning, HideParty or gameplay commands.

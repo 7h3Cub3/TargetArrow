@@ -302,6 +302,46 @@ local function can_show_replacement()
     return guard.allowed;
 end
 
+-- ===========================================================================
+-- Native map occlusion
+-- ===========================================================================
+-- A Direct3D sprite drawn in d3d_present cannot reliably sit behind FFXI's
+-- own UI windows. Read FFXI's active menu (Ashita 4's official 'menu' pointer)
+-- instead of tracking /map commands or keystrokes, which would miss maps opened
+-- from menus and maps dismissed with Escape.
+--
+-- This read does not alter game memory. If the menu pointer is unavailable,
+-- leave the existing target cursor behavior intact, and report that state in
+-- /ta status instead of hiding ALL cursors indefinitely.
+local map_ui = { open = false, menu = 'unknown' };
+
+local function map_is_open()
+    local ok, menu = pcall(function()
+        local pm = AshitaCore:GetPointerManager();
+        if pm == nil then return nil; end
+        local address = pm:Get('menu');
+        if not is_32bit_address(address) then return nil; end
+        address = ashita.memory.read_uint32(address);
+        if not is_32bit_address(address) then return nil; end
+        address = ashita.memory.read_uint32(address);
+        if not is_32bit_address(address) then return nil; end
+        address = ashita.memory.read_uint32(address + 0x04);
+        if not is_32bit_address(address) then return nil; end
+        return ashita.memory.read_string(address + 0x46, 16);
+    end);
+    if not ok or type(menu) ~= 'string' then
+        map_ui.open = false;
+        map_ui.menu = 'unavailable';
+        return false;
+    end
+    -- FFXI menu names are fixed-size strings, frequently null padded. Ashita
+    -- reports the native map menu as 'map' (possibly with a menu prefix).
+    menu = menu:gsub('%z.*', ''):lower();
+    map_ui.menu = menu;
+    map_ui.open = menu:find('map', 1, true) ~= nil;
+    return map_ui.open;
+end
+
 -- ==========================================================================
 -- Target acquisition and placement
 -- ==========================================================================
@@ -465,6 +505,17 @@ local function draw_frame()
         return;
     end
 
+    -- FFXI renders its native map before addon sprites, so suppress the
+    -- replacement cursor while that menu is active. The ordinary draw path
+    -- resumes on the next frame after the map is closed.
+    if map_is_open() then
+        draw.stage = 'hidden while map is open';
+        draw.target_index = 0;
+        draw.anchor = 'none';
+        draw.candidate_count = 0;
+        return;
+    end
+
     draw.stage = 'no active target';
     draw.target_index = 0;
     draw.anchor = 'none';
@@ -541,6 +592,7 @@ local function draw_config()
         end
         imgui.TextWrapped('HideParty: ' .. guard.reason);
         imgui.Text('Last draw: ' .. draw.stage);
+        imgui.Text('Map open: ' .. tostring(map_ui.open));
         imgui.Separator();
         imgui.Text('Cursor placement');
         local function slider(label, key, fmt)
@@ -627,9 +679,10 @@ ashita.events.register('command', 'command_cb', function(e)
         ui.open[1] = not ui.open[1];
         return;
     elseif command == 'status' then
-        notify(('v%s | enabled=%s | drawing_allowed=%s | guard=%s | last_draw=%s | target=%s | candidates=%d | anchor=%s | draws=%d | bob=%s | flash=%s | last_error=%s')
-            :format(addon.version, tostring(settings.enabled), tostring(settings.enabled and guard.allowed),
-                    guard.reason, draw.stage, tostring(draw.target_index), draw.candidate_count,
+        notify(('v%s | enabled=%s | drawing_allowed=%s | guard=%s | map_open=%s | menu=%s | last_draw=%s | target=%s | candidates=%d | anchor=%s | draws=%d | bob=%s | flash=%s | last_error=%s')
+            :format(addon.version, tostring(settings.enabled), tostring(settings.enabled and guard.allowed and not map_ui.open),
+                    guard.reason, tostring(map_ui.open), map_ui.menu, draw.stage,
+                    tostring(draw.target_index), draw.candidate_count,
                     draw.anchor, draw.successes, tostring(settings.bob == 1),
                     tostring(settings.flash == 1), last_render_error));
         return;

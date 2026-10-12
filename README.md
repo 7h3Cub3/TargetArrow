@@ -53,9 +53,15 @@ Not all custom addons appear as launcher checkboxes. The launcher uses the start
 
 ## Screenshots
 
-| Native target cursor | TargetArrow cursor |
-|:---:|:---:|
-| ![Native target cursor](screenshots/original-hideparty.png) | ![TargetArrow cursor](screenshots/targetarrow.png) |
+The third example below shows the optional animated cursor mode.
+
+| Native target cursor | TargetArrow cursor | Animated cursor |
+|:---:|:---:|:---:|
+| ![Native target cursor](screenshots/original-hideparty.png) | ![TargetArrow cursor](screenshots/targetarrow.png) | ![Animated TargetArrow cursor](screenshots/animated-cursor.gif) |
+
+## Map behavior
+
+TargetArrow automatically hides its cursor whenever the native FFXI map is open, and shows it again after the map is closed (provided HideParty is still hiding the native frames). This works regardless of how the map was opened. No extra configuration is required. The map is detected through Ashita 4's current-menu pointer; if the client does not expose it, `/ta status` reports `menu=unavailable`.
 
 ## Configuration
 

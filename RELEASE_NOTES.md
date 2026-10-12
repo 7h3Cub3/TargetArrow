@@ -19,3 +19,5 @@ Download **TargetArrow-v1.0.0.zip** below and extract it into `HorizonXI\Game\ad
 Read the [installation instructions](https://github.com/7h3Cub3/TargetArrow#installation-and-launcher-activation) for the full setup.
 
 **Author:** 7h3Cub3 · **License:** GPL-3.0-or-later.
+
+- Automatically hides cursor while the in-game map is open.
