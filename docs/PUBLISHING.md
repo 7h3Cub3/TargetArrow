@@ -1,17 +1,35 @@
-# Publishing and creating ZIPs on GitHub
+# Packaging and publishing TargetArrow
 
-TargetArrow is authored by 7h3Cub3: https://github.com/7h3Cub3/TargetArrow. GPL-3.0-or-later. Version stays **1.0.0** throughout compatibility testing.
+Repository: https://github.com/7h3Cub3/TargetArrow
 
-## Repository root
+## Release assets
 
-Put `targetarrow.lua`, `arrow.png`, `subarrow.png`, README.md, LICENSE, docs/, scripts/, tests/ and `.github/workflows/` directly in the repository root. There is **no installer**.
+The workflow builds and publishes **only** the installable `TargetArrow-vX.Y.Z.zip`. GitHub automatically provides matching **Source code (zip)** and **Source code (tar.gz)** archives for each tag.
 
-## Manually create ZIP artifacts while testing
+The text of `RELEASE_NOTES.md` is published **directly in the release description**. It is not replaced with a link or automatically generated commit notes.
 
-In GitHub, select **Actions → Build and Release ZIPs → Run workflow**. A build ZIP and a source ZIP become downloadable workflow artifacts; there is no GitHub Release on manual runs.
+## Manual build
 
-You can also run `python3 scripts/package_release.py --output-dir dist` locally. The packaging script reads `addon.version` from root `targetarrow.lua` and excludes user settings, local files and backups.
+Go to **Actions → Build and Release TargetArrow → Run workflow** to generate a `TargetArrow-Addon` artifact without publishing or editing a release.
 
-## Publish first 1.0.0 only after confirmed stable
+To run the build locally:
 
-Create and push tag `v1.0.0` on the validated source. The tag workflow verifies Lua syntax, tests and ZIP contents, then creates the GitHub Release with both archives attached. Tag and embedded version must match. Do not create intermediate public release tags or a changelog series during testing.
+```sh
+python3 scripts/package_release.py --output-dir dist
+python3 tests/test_package.py --dist-dir dist
+```
+
+## Tagged release
+
+Push a tag such as `v1.0.0`, matching the `addon.version` field in `targetarrow.lua`. GitHub Actions builds the addon ZIP and publishes the release with the contents of `RELEASE_NOTES.md` written directly into the release body.
+
+## Update an existing release
+
+The release body can be refreshed directly from the checked-out repository on `main`, without changing the tag or rebuilding the binary asset:
+
+```powershell
+gh release edit v1.0.0 -R 7h3Cub3/TargetArrow --notes-file RELEASE_NOTES.md
+gh release delete-asset v1.0.0 TargetArrow-Source-v1.0.0.zip -R 7h3Cub3/TargetArrow --yes
+```
+
+The installable addon archive stays attached. The standard **Source code (zip/tar.gz)** links are unaffected.

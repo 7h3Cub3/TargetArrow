@@ -1,134 +1,97 @@
 # TargetArrow
 
 [![Checks](https://github.com/7h3Cub3/TargetArrow/actions/workflows/check.yml/badge.svg)](https://github.com/7h3Cub3/TargetArrow/actions/workflows/check.yml)
-[![Build ZIPs](https://github.com/7h3Cub3/TargetArrow/actions/workflows/release.yml/badge.svg)](https://github.com/7h3Cub3/TargetArrow/actions/workflows/release.yml)
+[![Build ZIP](https://github.com/7h3Cub3/TargetArrow/actions/workflows/release.yml/badge.svg)](https://github.com/7h3Cub3/TargetArrow/actions/workflows/release.yml)
 
-**TargetArrow** is an open-source Ashita 4 addon for Final Fantasy XI / HorizonXI, authored by **7h3Cub3**.
+**TargetArrow** is an open-source Ashita 4 addon **built and tested for HorizonXI**. It displays a customizable marker above the selected target, including a separate marker for subtarget selection.
 
-Repository: https://github.com/7h3Cub3/TargetArrow  
-License: **GPL-3.0-or-later** (see [LICENSE](LICENSE))  
-Version: **1.0.0** — held at 1.0.0 during testing until the initial stable release is confirmed.
+**Author:** [7h3Cub3](https://github.com/7h3Cub3) · **Version:** 1.0.0 · **License:** [GPL-3.0-or-later](LICENSE)
 
-## Why TargetArrow exists
+## Features
 
-The stock [HideParty addon](https://github.com/AshitaXI/Ashita-v4beta/blob/main/addons/hideparty/hideparty.lua) hides FFXI's original party and target frames. Unfortunately, the native on-world arrow marking your target shares a UI primitive with the original target HP frame. Hiding that frame also removes the arrow. A custom UI such as XIUI replaces the target frame but not the on-world pointer.
+- Gold target cursor and green subtarget cursor by default.
+- Independent color presets or custom RGB colors for each cursor.
+- Adjustable size, position and model fallback height.
+- Optional vertical bobbing and opacity flashing, **both disabled by default**.
+- Ashita ImGui configuration window with a **Restore Defaults** button.
+- Model-based target positioning even when nameplates are hidden.
+- Automatic suppression of the replacement cursor when the native target interface is visible.
 
-**TargetArrow restores the world-space target pointer without restoring the native target window.** It is designed to run *alongside the original, unmodified HideParty*; XIUI is optional. It draws a gold arrow above the selected target and a green arrow while selecting a subtarget.
+## Requirements
 
-## HideParty is mandatory
+- **HorizonXI with Ashita 4**.
+- **HideParty**, loaded and actively hiding the native party and target frames.
+- XIUI or another replacement UI is optional.
 
-TargetArrow uses a read-only, fail-closed guard checked on every frame. The arrow draws only when:
+TargetArrow does not alter HideParty. If HideParty is unloaded, the native party or target interface is visible, or the visibility status is unavailable, TargetArrow does not draw its cursor.
 
-1. Ashita reports `hideparty` is loaded (`AddonManager:IsLoaded('hideparty')`).
-2. The game's native party primitive is actually hidden.
-3. The game's native target frame/arrow primitive is actually hidden.
-4. An eligible selected target can be projected onto the screen.
+## Installation and launcher activation
 
-`/hideparty show`, unloading HideParty, missing HideParty, or an unreadable UI state **automatically suppresses the arrow**. `/ta on` never bypasses the guard. TargetArrow does not modify native UI memory or patch HideParty.
+1. Download **TargetArrow-v1.0.0.zip** from the [Releases page](https://github.com/7h3Cub3/TargetArrow/releases).
+2. Extract it into `HorizonXI\Game\addons\`. It creates the folder:
 
-## Installation — no installer required
+   ```text
+   HorizonXI\Game\addons\targetarrow\
+   ├── targetarrow.lua
+   ├── arrow.png
+   ├── subarrow.png
+   ├── arrow-neutral.png
+   ├── subarrow-neutral.png
+   └── LICENSE
+   ```
 
-Download **TargetArrow-v1.0.0.zip** from a GitHub Release (or the Actions build artifacts), then extract directly into your game's `Game\addons` directory. The ZIP contains a `targetarrow` folder:
+3. In the **HorizonXI launcher**, enable **HideParty** in the addon options if it is listed, and ensure it is configured to hide the native party and target interface.
+4. To activate the manually installed TargetArrow addon at game startup, edit `HorizonXI\Game\scripts\default.txt`. In the **Custom user plugins and addons** section, add the following entry in the user-editable area:
 
-```text
-E:\HorizonXI\Game\addons\targetarrow\targetarrow.lua
-E:\HorizonXI\Game\addons\targetarrow\arrow.png
-E:\HorizonXI\Game\addons\targetarrow\subarrow.png
-E:\HorizonXI\Game\addons\targetarrow\arrow-neutral.png
-E:\HorizonXI\Game\addons\targetarrow\subarrow-neutral.png
-```
+   ```text
+   /addon load targetarrow
+   ```
 
-Alternatively, copy the five corresponding addon files from the **repository root** into `Game\addons\targetarrow\`. No PowerShell installer, original HideParty files, or third-party dependencies are bundled.
+5. Save the startup script and launch HorizonXI.
 
-In FFXI:
+Not all custom addons appear as launcher checkboxes. The launcher uses the startup script to load manually installed Ashita addons. See [Installation](docs/INSTALLATION.md).
 
-```text
-/addon load hideparty
-/hideparty hide
-/addon load targetarrow
-/ta status
-```
+## Screenshots
 
-Reload after updating with `/addon reload targetarrow`. The original HideParty must be restored if an earlier patch forced its target primitive to stay visible.
-
-## Screenshots — original vs TargetArrow
-
-The two screenshots below are taken from the actual game. The character name and
-its blue icon have been erased for privacy; **the cursor pixels, character and
-other gameplay pixels were left unchanged**. The silver cursor on the left is
-the game's normal marker; the gold cursor on the right is TargetArrow's restored
-original artwork.
-
-| Native FFXI target cursor | TargetArrow cursor |
+| Native target cursor | TargetArrow cursor |
 |:---:|:---:|
-| ![Native silver target cursor](screenshots/original-hideparty.png) | ![TargetArrow gold replacement cursor](screenshots/targetarrow.png) |
+| ![Native target cursor](screenshots/original-hideparty.png) | ![TargetArrow cursor](screenshots/targetarrow.png) |
 
-## Configuration window
+## Configuration
 
-Type **`/ta config`** to open or close the Ashita 4 ImGui settings window.
-The window does not open automatically. Settings apply immediately and persist
-in a local `settings.lua` file, except the session-only enable/disable switch.
+Enter **`/ta config`** to open or close the settings window. Changes apply immediately and are saved locally (except the session-only enable/disable switch).
 
-The window also has **Restore Defaults**, which reapplies the original gold/green arrows, scale `1.0`, offset `4`, fallback height `1.9`, and default color/animation parameters. It switches both animations off, re-enables TargetArrow for the session, and saves the defaults immediately to local `settings.lua`. It does not change HideParty or override its safety guard.
-
-The window provides:
-
-- Current HideParty validation and rendering state.
-- Size, vertical screen offset and fallback height.
-- **Independent target and subtarget arrow colors:** Original (the original
-  gold/green PNGs, pixel-for-pixel), Red, Blue, Green, Gold, Purple, Cyan,
-  White, or Custom RGB.
-- Optional **bobbing** (vertical sine-wave movement) with adjustable travel
-  distance and speed.
-- Optional **flashing** (opacity pulse) with adjustable speed and intensity.
-
-**Both animation effects are disabled by default.** They can be enabled
-independently. The default arrow appearance and its bone-based positioning are
-unchanged. Color modes other than Original use grayscale variants of the same
-cursor silhouettes; they never replace the familiar shield-shaped artwork.
-
-## Commands
+The menu offers cursor scale, placement, independent colors, optional bobbing/flashing animation, and **Restore Defaults**. Default values include gold/green cursors, scale `1.0`, vertical offset `4`, model fallback height `1.9` and no animation.
 
 | Command | Description |
 | --- | --- |
-| `/ta config` | Open/close the ImGui settings window |
-| `/ta status` | Show HideParty guard, drawing stage, target ID, anchor and errors |
-| `/ta on` / `/ta off` / `/ta toggle` | Enable, disable, toggle TargetArrow |
+| `/ta config` | Open or close the ImGui settings window |
+| `/ta status` | Display HideParty and rendering diagnostics |
+| `/ta on` / `/ta off` / `/ta toggle` | Enable or disable the addon for this session |
 | `/ta scale 1.0` | Arrow scale (0.5–2.5) |
-| `/ta offset 4` | Additional upward screen offset (-100 to 150 pixels) |
-| `/ta height 1.9` | World-unit height for non-skeletal fallback (0–15) |
-| `/ta bob on` / `/ta bob off` | Turn vertical bobbing on/off |
-| `/ta flash on` / `/ta flash off` | Turn opacity pulsing on/off |
-| `/ta color blue` | Set target cursor color by name |
-| `/ta subcolor purple` | Set subtarget cursor color by name |
+| `/ta offset 4` | Vertical offset (-100 to 150 pixels) |
+| `/ta height 1.9` | Fallback model height (0–15) |
+| `/ta bob on` / `/ta bob off` | Toggle bobbing |
+| `/ta flash on` / `/ta flash off` | Toggle flashing |
+| `/ta color blue` | Set target cursor color |
+| `/ta subcolor purple` | Set subtarget cursor color |
 
-`/targetarrow` is an alias for `/ta`. Numeric options save to local `settings.lua`; that runtime file is excluded from ZIPs and Git.
+`/targetarrow` is an alias for `/ta`. Color options are Original, Red, Blue, Green, Gold, Purple, Cyan, White and Custom RGB. See the [Configuration guide](docs/CONFIGURATION.md).
 
-## How arrow placement works
+## Compatibility and troubleshooting
 
-The game provides model skeleton data independently of whether its *nameplate is shown*. TargetArrow reads the model's nameplate **bone #2** as the primary attachment coordinate—the method used in the established working TargetArrow implementation. Disabling game nameplates or using a nameplate-hiding addon therefore **should not affect placement**. The bone is transformed through the current Direct3D view/projection matrices to screen pixels.
+TargetArrow was developed and tested for **HorizonXI with Ashita 4**. Other clients or Ashita builds have not been verified. Hiding nameplates should not change the marker position, which is derived from model data.
 
-For doors, unloaded models or unavailable skeleton information, it falls back to the entity's position plus a configurable height. **It never substitutes a low hitbox point when a valid bone is available but off-screen**, preventing the misplaced lower-right arrow seen during previous testing.
+For diagnostics use `/ta status`. `drawing_allowed=true` indicates HideParty's visibility checks passed, while `last_draw`, `anchor`, `draws` and `last_error` provide more detail. See [Troubleshooting](docs/TROUBLESHOOTING.md) and [Technical notes](docs/TECHNICAL.md).
 
-This model-bone strategy uses known client memory offsets and may require updates if the FFXI client changes. Read the [technical notes](docs/TECHNICAL.md).
+## Downloads and automated releases
 
-## GitHub Actions ZIP builds
+Each GitHub Release contains **only the installable `TargetArrow-vX.Y.Z.zip` addon**. GitHub automatically provides **Source code (zip)** and **Source code (tar.gz)** downloads, so no additional source archive is needed.
 
-Two workflows are included:
+The [GitHub Actions workflow](.github/workflows/release.yml) builds the addon and publishes the full text of [RELEASE_NOTES.md](RELEASE_NOTES.md) **directly in the release description**. A manual build without a release tag produces a downloadable workflow artifact.
 
-- [check.yml](.github/workflows/check.yml) validates syntax, behavior tests and ZIP contents on pushes and pull requests.
-- [release.yml](.github/workflows/release.yml) builds **TargetArrow-v1.0.0.zip** (installable addon) and **TargetArrow-Source-v1.0.0.zip** (GitHub source). Run it manually under **Actions → Build and Release ZIPs → Run workflow** to download build artifacts without creating a GitHub release.
+## License
 
-When the first stable version is validated, push the Git tag `v1.0.0`; GitHub Actions then creates the release and attaches the ZIPs. No change in version numbering or a development changelog is required before stability is confirmed. See [publishing](docs/PUBLISHING.md).
-
-## Diagnostics and validation
-
-Use `/ta status` while facing and selecting a monster. `drawing_allowed=true` means **the HideParty guard passed**, not necessarily that a sprite was drawn. Check `last_draw=`, `anchor=` (`nameplate-bone` preferred), `draws=` and `last_error=`. If the arrow is misplaced, include these fields in an issue report.
-
-The source and ZIPs are checked by automated tests; GUI and animation behavior still require in-game verification. The established skeleton-bone positioning is preserved, together with the HideParty guard.
-
-## Credits and licensing
-
-Copyright © 2026 **7h3Cub3**. This distribution is licensed **GPL-3.0-or-later**. The separate Ashita 4 runtime and original HideParty are not redistributed. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for references and the historical model-bone inspiration.
+Copyright © 2026 **7h3Cub3**. Licensed under [GPL-3.0-or-later](LICENSE). See [third-party notices](THIRD_PARTY_NOTICES.md).
 
 This project is not affiliated with or endorsed by Square Enix, HorizonXI, Ashita or XIUI.

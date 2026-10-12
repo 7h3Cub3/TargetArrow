@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate that release ZIPs include the required install/source files."""
+"""Validate that the single installable release ZIP includes the required addon files."""
 from pathlib import Path
 import argparse
 import zipfile
@@ -12,9 +12,10 @@ def main():
     files=[
         (f'TargetArrow-v{version}.zip',
          {f'targetarrow/{name}' for name in ('targetarrow.lua','arrow.png','subarrow.png','arrow-neutral.png','subarrow-neutral.png','LICENSE')}),
-        (f'TargetArrow-Source-v{version}.zip',
-         {f'TargetArrow-v{version}/{name}' for name in ('targetarrow.lua','screenshots/original-hideparty.png','screenshots/targetarrow.png','README.md','LICENSE','.github/workflows/release.yml','.github/workflows/check.yml','scripts/package_release.py','tests/test_package.py')}),
     ]
+    extras={path.name for path in args.dist_dir.glob('*.zip')} - {files[0][0]}
+    if extras:
+        raise SystemExit(f'Unexpected extra ZIPs: {sorted(extras)}')
     for filename, required in files:
         path=args.dist_dir/filename
         if not path.is_file(): raise SystemExit(f'Missing ZIP: {path}')

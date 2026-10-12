@@ -1,6 +1,6 @@
 # Troubleshooting
 
-- `drawing_allowed=false`: load stock HideParty and run `/hideparty hide`; make sure the native **party and target** windows disappear. Original target arrow disappears too—TargetArrow replaces it.
+- `drawing_allowed=false`: ensure HideParty is loaded and run `/hideparty hide`; make sure the native **party and target** windows disappear. The native target marker is hidden while TargetArrow provides its replacement.
 - `drawing_allowed=true` but no arrow: target an NPC or monster, face it, run `/ta status` and inspect `last_draw`, `anchor`, `draws`, `last_error`.
 - `anchor=nameplate-bone`: the model skeleton supplied an attachment coordinate. The arrow should be above its head, even with nameplates turned off.
 - `anchor=entity-fallback`: the model bone could not be found. Use `/ta height` if its icon is too low; this setting never alters positions when the skeleton bone is available.

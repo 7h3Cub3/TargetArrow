@@ -10,17 +10,17 @@ The guard uses the official Ashita `AddonManager:IsLoaded('hideparty')` followed
 
 ## Positioning and invisible nameplates
 
-For ordinary models, the first choice is the model skeleton's **bone index 2** as used by the earlier working implementation. Actor position is combined with the generator's bone offset. The 3D coordinates are projected using the Direct3D8 view and projection matrices and the current viewport. The nameplate can be hidden without changing those model coordinates. Therefore hiding nameplates generally does not affect the marker. Direct actor/skeleton offsets are client-build dependent; validate after updating the game client.
+For ordinary models, the first choice is the model skeleton's **bone index 2** as its attachment point. Actor position is combined with the generator's bone offset. The 3D coordinates are projected using the Direct3D8 view and projection matrices and the current viewport. The nameplate can be hidden without changing those model coordinates. Therefore hiding nameplates generally does not affect the marker. Direct actor/skeleton offsets are client-build dependent; validate after updating the game client.
 
-If the bone cannot be read, entity local/last coordinates are raised by the configured fallback height. Avoid using the entity origin as a replacement for a valid but off-screen bone; doing that was responsible for visually misplaced arrows in later test builds.
+If the bone cannot be read, entity local/last coordinates are raised by the configured fallback height. An off-screen bone does not cause an entity-origin fallback, because that would misplace the marker.
 
 ## Diagnostics
 
 `/ta status` reports whether the guard permits rendering, `last_draw`, current `target`, number of anchor `candidates`, the chosen `anchor`, successfully returned sprite submissions (`draws`), and `last_error`. A successful Direct3D draw call does not itself guarantee that a player can see the icon; only in-game observation verifies that.
 
-## Code provenance
+## Runtime interfaces
 
-The code is independently written around native Ashita 4 APIs and documented standard Direct3D math. The model-bone index and FFXI skeleton offsets are functional compatibility observations also seen in historical CustomTarget; its source and assets are not bundled. See THIRD_PARTY_NOTICES.md.
+The addon uses Ashita 4 APIs, Direct3D8 and client-specific model data. See [Third-party notices](../THIRD_PARTY_NOTICES.md) for references and attribution.
 
 ## ImGui and animation implementation
 

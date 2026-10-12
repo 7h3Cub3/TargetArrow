@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build reproducible, version-matched ZIP releases for the TargetArrow addon.
+"""Build the reproducible, version-matched installable TargetArrow addon ZIP.
 
 The archive layout is deliberately compatible with "Extract here" into Game/addons:
     targetarrow/targetarrow.lua
@@ -45,7 +45,10 @@ def build(outdir, tag=None):
         raise ValueError(f'Tag {tag!r} does not match addon.version ({expected})')
     outdir.mkdir(parents=True, exist_ok=True)
     addon_zip = outdir / f'TargetArrow-v{version}.zip'
-    source_zip = outdir / f'TargetArrow-Source-v{version}.zip'
+    # Ensure the output contains no redundant source archive.
+    legacy_source = outdir / f'TargetArrow-Source-v{version}.zip'
+    if legacy_source.exists():
+        legacy_source.unlink()
 
     for file in ADDON_FILES:
         if not (ROOT / file).is_file():
@@ -58,21 +61,7 @@ def build(outdir, tag=None):
             pack_file(zf, ROOT / name, f'targetarrow/{name}')
         pack_file(zf, ROOT / 'LICENSE', 'targetarrow/LICENSE')
 
-    # Explicitly select repository-owned source files; exclude runtime settings,
-    # backup directories, caches, build output and any accidental local secrets.
-    tracked = [
-        '.gitattributes', '.gitignore',
-        'README.md', 'LICENSE', 'THIRD_PARTY_NOTICES.md',
-    ]
-    paths = [ROOT / name for name in tracked + list(ADDON_FILES)]
-    for folder in ('docs', 'tests', 'scripts', 'screenshots', '.github/workflows'):
-        paths.extend(p for p in (ROOT / folder).rglob('*') if p.is_file() and not p.name.endswith(('.pyc', '.bak')) and '__pycache__' not in p.parts)
-    with zipfile.ZipFile(source_zip, 'w') as zf:
-        for file in sorted(set(paths), key=lambda x: x.relative_to(ROOT).as_posix()):
-            if not file.is_file():
-                raise FileNotFoundError(file)
-            pack_file(zf, file, f'TargetArrow-v{version}/{file.relative_to(ROOT).as_posix()}')
-    return addon_zip, source_zip
+    return (addon_zip,)
 
 
 def main():

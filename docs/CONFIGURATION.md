@@ -8,7 +8,7 @@ The menu provides the original **Scale**, **Vertical offset**, and **Fallback mo
 
 ## Colors
 
-Color modes: `Original`, `Red`, `Blue`, `Green`, `Gold`, `Purple`, `Cyan`, `White`, or `Custom` RGB. `Original` displays the two unchanged historical cursor PNGs (gold for a target, green for a subtarget). Every other mode uses a grayscale-tintable copy of that exact silhouette; it does not change its shape or anchoring.
+Color modes: `Original`, `Red`, `Blue`, `Green`, `Gold`, `Purple`, `Cyan`, `White`, or `Custom` RGB. `Original` displays the two included classic cursor PNGs (gold for a target, green for a subtarget). Every other mode uses a grayscale-tintable copy of that exact silhouette; it does not change its shape or anchoring.
 
 Commands: `/ta color red` and `/ta subcolor blue`. Use `original` to restore the classic colors. Choose Custom in the menu to get a full RGB color editor. Target and subtarget choices are stored independently.
 
