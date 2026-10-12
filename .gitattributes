@@ -1,7 +1,21 @@
-*.lua text eol=lf
-*.md text eol=lf
-*.py text eol=lf
-*.yml text eol=lf
-*.ps1 text eol=crlf
+# Keep text files LF in both the Git repository and Windows working copies.
+# Overrides core.autocrlf=true, preventing LF->CRLF conversion warnings.
+* text=auto eol=lf
+
+# Keep important repository metadata and the license explicitly LF.
+.gitattributes text eol=lf
+.gitignore     text eol=lf
+LICENSE       text eol=lf
+
+# Program source, docs and workflows.
+*.lua  text eol=lf
+*.md   text eol=lf
+*.py   text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.sh   text eol=lf
+
+# Binary assets must never undergo line-ending conversions.
 *.png binary
-*.yml text eol=lf
+*.gif binary
+*.zip binary
