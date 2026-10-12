@@ -1,4 +1,4 @@
-# TargetArrow R1.0
+# TargetArrow 1.0
 
 **TargetArrow** is an Ashita 4 addon built and tested for **HorizonXI**. It adds a configurable in-world target indicator while HideParty hides the native party and target interface.
 
@@ -15,7 +15,7 @@
 
 ## Installation
 
-Download **TargetArrow-R1.0.zip** below and extract it into `HorizonXI\Game\addons\`. Enable HideParty and configure the HorizonXI startup script to load TargetArrow.
+Download **TargetArrow-1.0.zip** below and extract it into `HorizonXI\Game\addons\`. Enable HideParty and configure the HorizonXI startup script to load TargetArrow.
 
 Read the [installation instructions](https://github.com/7h3Cub3/TargetArrow#installation-and-launcher-activation) for the full setup.
 

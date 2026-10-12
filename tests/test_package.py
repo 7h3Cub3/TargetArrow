@@ -8,7 +8,7 @@ def main():
     ap=argparse.ArgumentParser()
     ap.add_argument('--dist-dir',type=Path,default=Path('dist'))
     args=ap.parse_args()
-    tag='R1.0'
+    tag='1.0'
     files=[
         (f'TargetArrow-{tag}.zip',
          {f'targetarrow/{name}' for name in ('targetarrow.lua','arrow.png','subarrow.png','arrow-neutral.png','subarrow-neutral.png','LICENSE')}),

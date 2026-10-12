@@ -40,10 +40,10 @@ def pack_file(zf, path, archive_name):
 
 def build(outdir, tag=None):
     version = read_version()
-    # R<major>.<minor> identifies patch-zero releases; later patch versions
-    # are represented as R<major>.<minor>.<patch>.
+    # A patch-zero addon version (1.0.0) is released as tag 1.0.
+    # Nonzero patch versions use the full tag (1.0.1, etc.).
     major, minor, patch = (int(part) for part in version.split('.'))
-    expected = f'R{major}.{minor}' if patch == 0 else f'R{major}.{minor}.{patch}'
+    expected = f'{major}.{minor}' if patch == 0 else f'{major}.{minor}.{patch}'
     if tag is not None and tag != expected:
         raise ValueError(f'Tag {tag!r} does not match addon.version ({expected})')
     outdir.mkdir(parents=True, exist_ok=True)
@@ -70,7 +70,7 @@ def build(outdir, tag=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir', type=Path, default=ROOT / 'dist')
-    parser.add_argument('--tag', help='Release tag, must match the embedded addon version (1.0.0 -> R1.0)')
+    parser.add_argument('--tag', help='Release tag, must match the embedded addon version (1.0.0 -> 1.0)')
     args = parser.parse_args()
     try:
         files = build(args.output_dir, args.tag)
