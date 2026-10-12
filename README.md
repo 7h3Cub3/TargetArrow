@@ -40,16 +40,20 @@ TargetArrow does not alter HideParty. If HideParty is unloaded, the native party
    └── LICENSE
    ```
 
-3. In the **HorizonXI launcher**, enable **HideParty** in the addon options if it is listed, and ensure it is configured to hide the native party and target interface.
-4. To activate the manually installed TargetArrow addon at game startup, edit `HorizonXI\Game\scripts\default.txt`. In the **Custom user plugins and addons** section, add the following entry in the user-editable area:
+3. In the **HorizonXI launcher**, enable **HideParty** and configure it to hide the native party and target frames.
+4. **Activate TargetArrow using either method:**
 
-   ```text
-   /addon load targetarrow
-   ```
+   - **HorizonXI launcher:** Open the launcher's **Addons** section and enable **TargetArrow** after installing it. This loads TargetArrow when you start the game.
+   - **Ashita startup script:** Alternatively, edit `HorizonXI\Game\scripts\default.txt`. Under **Custom user plugins and addons**, add:
 
-5. Save the startup script and launch HorizonXI.
+     ```text
+     /addon load targetarrow
+     ```
 
-Not all custom addons appear as launcher checkboxes. The launcher uses the startup script to load manually installed Ashita addons. See [Installation](docs/INSTALLATION.md).
+   Use **one activation method**, rather than loading the addon twice. If TargetArrow isn't listed in the launcher, use the startup script.
+5. Save your selections and launch HorizonXI. The cursor will appear when HideParty is actively hiding the native interface.
+
+For additional installation and update details, see [Installation](docs/INSTALLATION.md).
 
 ## Screenshots
 
