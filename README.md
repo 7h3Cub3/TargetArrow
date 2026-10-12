@@ -5,7 +5,7 @@
 
 **TargetArrow** is an open-source Ashita 4 addon **built and tested for HorizonXI**. It displays a customizable marker above the selected target, including a separate marker for subtarget selection.
 
-**Author:** [7h3Cub3](https://github.com/7h3Cub3) · **Version:** 1.0.0 · **License:** [GPL-3.0-or-later](LICENSE)
+**Author:** [7h3Cub3](https://github.com/7h3Cub3) · **Release:** R1.0 · **Addon version:** 1.0.0 · **License:** [GPL-3.0-or-later](LICENSE)
 
 ## Features
 
@@ -27,7 +27,7 @@ TargetArrow does not alter HideParty. If HideParty is unloaded, the native party
 
 ## Installation and launcher activation
 
-1. Download **TargetArrow-v1.0.0.zip** from the [Releases page](https://github.com/7h3Cub3/TargetArrow/releases).
+1. Download **TargetArrow-R1.0.zip** from the [Releases page](https://github.com/7h3Cub3/TargetArrow/releases).
 2. Extract it into `HorizonXI\Game\addons\`. It creates the folder:
 
    ```text
@@ -58,6 +58,15 @@ The third example below shows the optional animated cursor mode.
 | Native target cursor | TargetArrow cursor | Animated cursor |
 |:---:|:---:|:---:|
 | ![Native target cursor](screenshots/original-hideparty.png) | ![TargetArrow cursor](screenshots/targetarrow.png) | ![Animated TargetArrow cursor](screenshots/animated-cursor.gif) |
+
+## Acknowledgements
+
+Special thanks to the addon authors whose work helped inspire TargetArrow:
+
+- **HideTarget** by **Asmos**
+- **CustomTarget** by **Jyouya**
+
+Their ideas and prior work helped shape the direction of this addon.
 
 ## Map behavior
 
@@ -92,7 +101,7 @@ For diagnostics use `/ta status`. `drawing_allowed=true` indicates HideParty's v
 
 ## Downloads and automated releases
 
-Each GitHub Release contains **only the installable `TargetArrow-vX.Y.Z.zip` addon**. GitHub automatically provides **Source code (zip)** and **Source code (tar.gz)** downloads, so no additional source archive is needed.
+Each GitHub Release contains **only the installable `TargetArrow-RX.Y.zip` addon**. GitHub automatically provides **Source code (zip)** and **Source code (tar.gz)** downloads, so no additional source archive is needed.
 
 The [GitHub Actions workflow](.github/workflows/release.yml) builds the addon and publishes the full text of [RELEASE_NOTES.md](RELEASE_NOTES.md) **directly in the release description**. A manual build without a release tag produces a downloadable workflow artifact.
 

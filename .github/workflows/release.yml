@@ -3,7 +3,7 @@ name: Build and Release TargetArrow
 on:
   push:
     tags:
-      - 'v[0-9]*'
+      - 'R[0-9]*'
   workflow_dispatch:
 
 permissions:
@@ -43,12 +43,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: TargetArrow-Addon
-          path: dist/TargetArrow-v*.zip
+          path: dist/TargetArrow-R*.zip
           if-no-files-found: error
           retention-days: 30
 
       - name: Publish addon ZIP and inline release notes
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/R')
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -65,7 +65,7 @@ jobs:
             gh release create "$TAG" "$ZIP" --title "TargetArrow $TAG" --notes-file RELEASE_NOTES.md --verify-tag
           fi
 
-          # GitHub automatically provides source archives; remove any extra source asset.
+          # GitHub automatically provides source archives; a separate source ZIP is not needed.
           OLD_SOURCE="TargetArrow-Source-${TAG}.zip"
           if gh release view "$TAG" --json assets --jq '.assets[].name' | grep -Fxq "$OLD_SOURCE"; then
             gh release delete-asset "$TAG" "$OLD_SOURCE" --yes

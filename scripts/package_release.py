@@ -40,13 +40,16 @@ def pack_file(zf, path, archive_name):
 
 def build(outdir, tag=None):
     version = read_version()
-    expected = f'v{version}'
+    # R<major>.<minor> identifies patch-zero releases; later patch versions
+    # are represented as R<major>.<minor>.<patch>.
+    major, minor, patch = (int(part) for part in version.split('.'))
+    expected = f'R{major}.{minor}' if patch == 0 else f'R{major}.{minor}.{patch}'
     if tag is not None and tag != expected:
         raise ValueError(f'Tag {tag!r} does not match addon.version ({expected})')
     outdir.mkdir(parents=True, exist_ok=True)
-    addon_zip = outdir / f'TargetArrow-v{version}.zip'
+    addon_zip = outdir / f'TargetArrow-{expected}.zip'
     # Ensure the output contains no redundant source archive.
-    legacy_source = outdir / f'TargetArrow-Source-v{version}.zip'
+    legacy_source = outdir / f'TargetArrow-Source-{expected}.zip'
     if legacy_source.exists():
         legacy_source.unlink()
 
@@ -67,7 +70,7 @@ def build(outdir, tag=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir', type=Path, default=ROOT / 'dist')
-    parser.add_argument('--tag', help='Release tag, required to match the embedded version exactly')
+    parser.add_argument('--tag', help='Release tag, must match the embedded addon version (1.0.0 -> R1.0)')
     args = parser.parse_args()
     try:
         files = build(args.output_dir, args.tag)

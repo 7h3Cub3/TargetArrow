@@ -8,9 +8,9 @@ def main():
     ap=argparse.ArgumentParser()
     ap.add_argument('--dist-dir',type=Path,default=Path('dist'))
     args=ap.parse_args()
-    version='1.0.0'
+    tag='R1.0'
     files=[
-        (f'TargetArrow-v{version}.zip',
+        (f'TargetArrow-{tag}.zip',
          {f'targetarrow/{name}' for name in ('targetarrow.lua','arrow.png','subarrow.png','arrow-neutral.png','subarrow-neutral.png','LICENSE')}),
     ]
     extras={path.name for path in args.dist_dir.glob('*.zip')} - {files[0][0]}
