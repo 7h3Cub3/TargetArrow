@@ -27,7 +27,7 @@ TargetArrow does not alter HideParty. If HideParty is unloaded, the native party
 
 ## Installation and launcher activation
 
-1. Download **TargetArrow-1.0.zip** from the [Releases page](https://github.com/7h3Cub3/TargetArrow/releases).
+1. Download the **latest TargetArrow ZIP** from the [Releases page](https://github.com/7h3Cub3/TargetArrow/releases).
 2. Extract it into `HorizonXI\Game\addons\`. It creates the folder:
 
    ```text
@@ -105,7 +105,7 @@ For diagnostics use `/ta status`. `drawing_allowed=true` indicates HideParty's v
 
 ## Downloads and automated releases
 
-Each GitHub Release contains **only the installable `TargetArrow-X.Y.zip` addon**. GitHub automatically provides **Source code (zip)** and **Source code (tar.gz)** downloads, so no additional source archive is needed.
+Each GitHub Release contains **only the latest installable TargetArrow ZIP**. GitHub automatically provides **Source code (zip)** and **Source code (tar.gz)** downloads, so no additional source archive is needed.
 
 The [GitHub Actions workflow](.github/workflows/release.yml) builds the addon and publishes the full text of [RELEASE_NOTES.md](RELEASE_NOTES.md) **directly in the release description**. A manual build without a release tag produces a downloadable workflow artifact.
 

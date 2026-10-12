@@ -6,7 +6,7 @@ Repository: https://github.com/7h3Cub3/TargetArrow
 
 The workflow builds and publishes **only** the installable `TargetArrow-X.Y.zip`. GitHub automatically provides matching **Source code (zip)** and **Source code (tar.gz)** archives for each tag.
 
-The text of `RELEASE_NOTES.md` is published **directly in the release description**. It is not replaced with a link or automatically generated commit notes.
+The text of `RELEASE_NOTES.md` is published **directly in the release description**. Do not start the release notes with a heading that duplicates the GitHub release title. It is not replaced with a link or automatically generated commit notes.
 
 ## Manual build
 

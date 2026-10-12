@@ -2,7 +2,7 @@
 
 TargetArrow was built and tested for **HorizonXI with Ashita 4**. It requires **HideParty**, configured to hide the native party and target frames.
 
-1. Download **TargetArrow-1.0.zip** from [GitHub Releases](https://github.com/7h3Cub3/TargetArrow/releases).
+1. Download the **latest TargetArrow ZIP** from the [Releases page](https://github.com/7h3Cub3/TargetArrow/releases).
 2. Extract the ZIP into `HorizonXI\Game\addons\`, resulting in `HorizonXI\Game\addons\targetarrow\targetarrow.lua` and the accompanying PNG cursor files.
 3. Open the **HorizonXI launcher** and enable **HideParty** in the Addons section. Configure HideParty to hide the native party and target interface.
 4. Enable TargetArrow using **one** of these methods:
