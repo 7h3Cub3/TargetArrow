@@ -1,0 +1,13 @@
+# Runtime-generated settings and backups
+settings.lua
+**/settings.lua
+targetarrow.backup-*/
+*.bak
+*.log
+__pycache__/
+.pytest_cache/
+.DS_Store
+Thumbs.db
+
+# Local release output
+dist/

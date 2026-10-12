@@ -1,0 +1,23 @@
+name: Verify TargetArrow
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install Lua 5.1
+        run: sudo apt-get update && sudo apt-get install -y lua5.1
+      - name: Compile Lua syntax
+        run: luac5.1 -p targetarrow.lua
+      - name: Run tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Verify distributable ZIPs
+        run: |
+          python3 scripts/package_release.py --output-dir dist
+          python3 tests/test_package.py --dist-dir dist

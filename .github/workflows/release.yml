@@ -1,0 +1,61 @@
+name: Build and Release ZIPs
+
+on:
+  push:
+    tags:
+      - 'v[0-9]*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Validate and package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact source commit
+        uses: actions/checkout@v4
+
+      - name: Install Lua 5.1
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lua5.1
+
+      - name: Verify addon syntax and behavior
+        run: |
+          luac5.1 -p targetarrow.lua
+          python3 -m unittest discover -s tests -p 'test_*.py' -v
+
+      - name: Build ZIP archives and verify tag version
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            python3 scripts/package_release.py --output-dir dist --tag "${GITHUB_REF_NAME}"
+          else
+            python3 scripts/package_release.py --output-dir dist
+          fi
+          python3 tests/test_package.py --dist-dir dist
+
+      - name: Upload build artifacts (also for manual runs)
+        uses: actions/upload-artifact@v4
+        with:
+          name: TargetArrow-ZIPs
+          path: dist/*.zip
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish ZIPs to tagged GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/*.zip --clobber
+          else
+            gh release create "$TAG" dist/*.zip --title "TargetArrow $TAG" --generate-notes --verify-tag
+          fi
+    permissions:
+      contents: write
